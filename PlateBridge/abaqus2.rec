@@ -1,0 +1,797 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.Model(name='FuzhouHouyuRoad')
+mdb.models['FuzhouHouyuRoad'].ConstrainedSketch(name='__profile__', sheetSize=
+    4.0)
+mdb.models['FuzhouHouyuRoad'].sketches['__profile__'].Line(point1=(0.0, 0.0), 
+    point2=(0.0, 13))
+mdb.models['FuzhouHouyuRoad'].sketches['__profile__'].Line(point1=(0.0, 13), 
+    point2=(22, 18))
+mdb.models['FuzhouHouyuRoad'].sketches['__profile__'].Line(point1=(22, 18), 
+    point2=(22, 0.0))
+mdb.models['FuzhouHouyuRoad'].sketches['__profile__'].Line(point1=(22, 0.0), 
+    point2=(0.0, 0.0))
+mdb.models['FuzhouHouyuRoad'].Part(dimensionality=THREE_D, name='BridgeDeck', 
+    type=DEFORMABLE_BODY)
+mdb.models['FuzhouHouyuRoad'].parts['BridgeDeck'].BaseShell(sketch=
+    mdb.models['FuzhouHouyuRoad'].sketches['__profile__'])
+del mdb.models['FuzhouHouyuRoad'].sketches['__profile__']
+mdb.models['FuzhouHouyuRoad'].Material(name='C40')
+mdb.models['FuzhouHouyuRoad'].materials['C40'].Elastic(table=((32500000000.0, 
+    0.2), ))
+mdb.models['FuzhouHouyuRoad'].Material(name='C30')
+mdb.models['FuzhouHouyuRoad'].materials['C30'].Elastic(table=((30000000000.0, 
+    0.2), ))
+mdb.models['FuzhouHouyuRoad'].HomogeneousShellSection(idealization=
+    NO_IDEALIZATION, material='C40', name='DeckSection', poissonDefinition=
+    DEFAULT, preIntegrate=ON, thickness=0.5, thicknessField='', 
+    thicknessModulus=None, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['FuzhouHouyuRoad'].parts['BridgeDeck'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    faces=mdb.models['FuzhouHouyuRoad'].parts['BridgeDeck'].faces.findAt(((
+    7.333333, 4.333333, 0.0), (0.0, 0.0, 1.0)), )), sectionName='DeckSection', 
+    thicknessAssignment=FROM_SECTION)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Instance(dependent=OFF, name=
+    'Plate-1', part=mdb.models['FuzhouHouyuRoad'].parts['BridgeDeck'])
+mdb.models['FuzhouHouyuRoad'].rootAssembly.PartitionFaceByShortestPath(faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((7.333333, 4.333333, 0.0), )), point1=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].InterestingPoint(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].edges.findAt(
+    (5.5, 14.25, 0.0), ), MIDDLE), point2=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].InterestingPoint(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].edges.findAt(
+    (16.5, 0.0, 0.0), ), MIDDLE))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(edges=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].edges.findAt(
+    ((0.0, 1.0, 0.0), )), name='End-1')
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(edges=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].edges.findAt(
+    ((11, 1.0, 0.0), )), name='End-2')
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(edges=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].edges.findAt(
+    ((22, 1.0, 0.0), )), name='End-3')
+mdb.models['FuzhouHouyuRoad'].StaticStep(name='ApplyLoad', previous='Initial')
+mdb.models['FuzhouHouyuRoad'].fieldOutputRequests['F-Output-1'].setValues(
+    variables=('S', 'PE', 'PEEQ', 'PEMAG', 'LE', 'U', 'RF', 'CF', 'SF', 
+    'CSTRESS', 'CDISP'))
+mdb.models['FuzhouHouyuRoad'].DisplacementBC(amplitude=UNSET, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, fieldName='', fixed=OFF, localCsys=
+    None, name='BC-1', region=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['End-1'], u1=0.0, u2=0.0, 
+    u3=0.0, ur1=0.0, ur2=UNSET, ur3=0.0)
+mdb.models['FuzhouHouyuRoad'].DisplacementBC(amplitude=UNSET, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, fieldName='', fixed=OFF, localCsys=
+    None, name='BC-2', region=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['End-2'], u1=0.0, u2=0.0, 
+    u3=0.0, ur1=0.0, ur2=UNSET, ur3=0.0)
+mdb.models['FuzhouHouyuRoad'].DisplacementBC(amplitude=UNSET, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, fieldName='', fixed=OFF, localCsys=
+    None, name='BC-3', region=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['End-3'], u1=0.0, u2=0.0, 
+    u3=0.0, ur1=0.0, ur2=UNSET, ur3=0.0)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(0.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[7], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[7], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(1.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[12], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[12], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(1.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[17], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[17], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(2.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[22], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[22], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(2.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[27], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[27], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(3.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[32], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[32], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(3.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[37], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[37], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(4.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[42], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[42], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(4.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[47], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[47], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(5.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[52], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[52], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(5.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[57], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[57], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(6.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[62], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[62], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(6.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[67], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[67], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(7.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[72], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[72], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(7.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[77], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[77], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(8.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[82], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[82], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(8.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[87], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[87], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(9.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[92], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[92], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(9.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[97], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[97], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(10.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[102], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[102], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(10.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[107], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[107], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(11.0, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[112], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[112], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+mdb.jobs['Job-2'].waitForCompletion()
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=(11.5, 3.0, 0))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(name='m_Set-30', 
+    referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[117], ))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Surface(name='s_Surf-30', 
+    side1Faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((5.0, 5.0, 0), )))
+mdb.models['FuzhouHouyuRoad'].Coupling(controlPoint=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['m_Set-30'], couplingType=
+    DISTRIBUTING, influenceRadius=0.1, localCsys=None, name='Constraint-RP1', 
+    surface=mdb.models['FuzhouHouyuRoad'].rootAssembly.surfaces['s_Surf-30'], 
+    u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+mdb.models['FuzhouHouyuRoad'].ConcentratedForce(cf3=-1, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, field='', localCsys=None, name=
+    'Load-1', region=Region(referencePoints=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.referencePoints[117], )))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.seedPartInstance(deviationFactor=0.1
+    , minSizeFactor=0.1, regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ), size=
+    0.2)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.generateMesh(regions=(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'], ))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='FuzhouHouyuRoad', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-2', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numGPUs=0, queue=None, resultsFormat=ODB, scratch='', type=
+    ANALYSIS, userSubroutine='', waitHours=0, waitMinutes=0)
+mdb.jobs['Job-2'].submit(consistencyChecking=OFF)
+#* Abaqus/Analysis exited with error.

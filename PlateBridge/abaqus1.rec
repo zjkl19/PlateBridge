@@ -1,0 +1,86 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.Model(name='FuzhouHouyuRoad')
+mdb.models['FuzhouHouyuRoad'].ConstrainedSketch(name='__profile__', sheetSize=
+    4.0)
+mdb.models['FuzhouHouyuRoad'].sketches['__profile__'].Line(point1=(0.0, 0.0), 
+    point2=(0.0, 13))
+mdb.models['FuzhouHouyuRoad'].sketches['__profile__'].Line(point1=(0.0, 13), 
+    point2=(22, 18))
+mdb.models['FuzhouHouyuRoad'].sketches['__profile__'].Line(point1=(22, 18), 
+    point2=(22, 0.0))
+mdb.models['FuzhouHouyuRoad'].sketches['__profile__'].Line(point1=(22, 0.0), 
+    point2=(0.0, 0.0))
+mdb.models['FuzhouHouyuRoad'].Part(dimensionality=THREE_D, name='BridgeDeck', 
+    type=DEFORMABLE_BODY)
+mdb.models['FuzhouHouyuRoad'].parts['BridgeDeck'].BaseShell(sketch=
+    mdb.models['FuzhouHouyuRoad'].sketches['__profile__'])
+del mdb.models['FuzhouHouyuRoad'].sketches['__profile__']
+mdb.models['FuzhouHouyuRoad'].Material(name='C40')
+mdb.models['FuzhouHouyuRoad'].materials['C40'].Elastic(table=((32500000000.0, 
+    0.2), ))
+mdb.models['FuzhouHouyuRoad'].Material(name='C30')
+mdb.models['FuzhouHouyuRoad'].materials['C30'].Elastic(table=((30000000000.0, 
+    0.2), ))
+mdb.models['FuzhouHouyuRoad'].HomogeneousShellSection(idealization=
+    NO_IDEALIZATION, material='C40', name='DeckSection', poissonDefinition=
+    DEFAULT, preIntegrate=ON, thickness=0.5, thicknessField='', 
+    thicknessModulus=None, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['FuzhouHouyuRoad'].parts['BridgeDeck'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    faces=mdb.models['FuzhouHouyuRoad'].parts['BridgeDeck'].faces.findAt(((
+    7.333333, 4.333333, 0.0), (0.0, 0.0, 1.0)), )), sectionName='DeckSection', 
+    thicknessAssignment=FROM_SECTION)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Instance(dependent=OFF, name=
+    'Plate-1', part=mdb.models['FuzhouHouyuRoad'].parts['BridgeDeck'])
+mdb.models['FuzhouHouyuRoad'].rootAssembly.PartitionFaceByShortestPath(faces=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].faces.findAt(
+    ((7.333333, 4.333333, 0.0), )), point1=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].InterestingPoint(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].edges.findAt(
+    (5.5, 14.25, 0.0), ), MIDDLE), point2=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].InterestingPoint(
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].edges.findAt(
+    (16.5, 0.0, 0.0), ), MIDDLE))
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(edges=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].edges.findAt(
+    ((0.0, 1.0, 0.0), )), name='End-1')
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(edges=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].edges.findAt(
+    ((11, 1.0, 0.0), )), name='End-2')
+mdb.models['FuzhouHouyuRoad'].rootAssembly.Set(edges=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.instances['Plate-1'].edges.findAt(
+    ((22, 1.0, 0.0), )), name='End-3')
+mdb.models['FuzhouHouyuRoad'].StaticStep(name='ApplyLoad', previous='Initial')
+mdb.models['FuzhouHouyuRoad'].fieldOutputRequests['F-Output-1'].setValues(
+    variables=('S', 'PE', 'PEEQ', 'PEMAG', 'LE', 'U', 'RF', 'CF', 'SF', 
+    'CSTRESS', 'CDISP'))
+mdb.models['FuzhouHouyuRoad'].DisplacementBC(amplitude=UNSET, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, fieldName='', fixed=OFF, localCsys=
+    None, name='BC-1', region=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['End-1'], u1=0.0, u2=0.0, 
+    u3=0.0, ur1=0.0, ur2=UNSET, ur3=0.0)
+mdb.models['FuzhouHouyuRoad'].DisplacementBC(amplitude=UNSET, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, fieldName='', fixed=OFF, localCsys=
+    None, name='BC-2', region=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['End-2'], u1=0.0, u2=0.0, 
+    u3=0.0, ur1=0.0, ur2=UNSET, ur3=0.0)
+mdb.models['FuzhouHouyuRoad'].DisplacementBC(amplitude=UNSET, createStepName=
+    'ApplyLoad', distributionType=UNIFORM, fieldName='', fixed=OFF, localCsys=
+    None, name='BC-3', region=
+    mdb.models['FuzhouHouyuRoad'].rootAssembly.sets['End-3'], u1=0.0, u2=0.0, 
+    u3=0.0, ur1=0.0, ur2=UNSET, ur3=0.0)
+mdb.models['FuzhouHouyuRoad'].rootAssembly.ReferencePoint(point=0.5)
+#* TypeError: keyword error on point

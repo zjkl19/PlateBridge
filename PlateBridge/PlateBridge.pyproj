@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="PlateBridge - Copy.py" />
+    <Compile Include="PlateBridge-IL-calc.py" />
+    <Compile Include="PlateBridge-IL.py" />
     <Compile Include="PlateBridge.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
