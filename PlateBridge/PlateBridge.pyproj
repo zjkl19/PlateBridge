@@ -21,8 +21,12 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="PlateBridge - Copy - Copy.py" />
+    <Compile Include="PlateBridge-CityA-3lanesNonVehicleLoad.py" />
+    <Compile Include="PlateBridge-CityA-2lanes.py" />
+    <Compile Include="PlateBridge-Modal.py" />
     <Compile Include="PlateBridge-rq.py" />
-    <Compile Include="PlateBridge - Copy.py" />
+    <Compile Include="PlateBridge-designVehicle-1stSpanMidSpan.py" />
     <Compile Include="PlateBridge-IL-calc.py" />
     <Compile Include="PlateBridge-IL.py" />
     <Compile Include="PlateBridge.py" />
