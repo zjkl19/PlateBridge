@@ -116,27 +116,9 @@ a.Instance(name='Plate-2', part=p, dependent=OFF)
 
 #: The instance Plate-2 was translated by 0., 0., 400.E-03 with respect to the assembly coordinate system
 #0.40=0.30/2+0.50/2
-a = mdb.models[modelName].rootAssembly
+a = mdb.models['FuzhouHouyuRoad'].rootAssembly
 a.translate(instanceList=('Plate-2', ), vector=(0.0, 0.0, 0.4))
 
-#create set
-#left
-e1 = a.instances['Plate-1'].edges
-edges1 = e1.findAt(((0.0, 3.875, 0.0), ))
-a.Set(edges=edges1, name='End-1')
-region = a.sets['End-1']
-
-#middle
-#edges1 = e1.findAt(((span, 1.0, 0.0), ))
-#a.Set(edges=edges1, name='End-2')
-
-#right
-edges1 = e1.findAt(((2*span, 1.0, 0.0), ))
-a.Set(edges=edges1, name='End-3')
-
-s1 = a.instances['Plate-1'].faces
-side1Faces1 = s1.findAt(((7.333333, 5.333333, 0.0), ))
-a.Surface(side1Faces=side1Faces1, name='s_Surf-Plate1')
 
 #create partition
 #f1 = a.instances['Plate-1'].faces
@@ -161,6 +143,7 @@ dP2=a.DatumPointByProjOnFace(point=v11.findAt(coordinates=(22.0, 14.3, 0.4)),
     face=f11.findAt(coordinates=(14.666667, 5.166667, 0.0)))
 
 #create DatumPoint on Plate-2 by proj
+a = mdb.models['FuzhouHouyuRoad'].rootAssembly
 v1 = a.instances['Plate-1'].vertices
 f1 = a.instances['Plate-2'].faces
 dP3=a.DatumPointByProjOnFace(point=v1.findAt(coordinates=(0.0, 13.0, 0.0)), 
@@ -207,11 +190,6 @@ a.PartitionFaceByShortestPath(faces=pickedFaces,
     coordinates=(16.5, 0.0, 0.0)), rule=MIDDLE), 
     point2=a.instances['Plate-1'].InterestingPoint(edge=e11.findAt(
     coordinates=(5.5, 14.25, 0.0)), rule=MIDDLE))
-
-#middle
-e1 = a.instances['Plate-1'].edges
-edges1 = e1.findAt(((span, 1.0, 0.0), ), ((span, 14.2, 0.0), ))
-a.Set(edges=edges1, name='End-2')
 
 f1 = a.instances['Plate-2'].faces
 pickedFaces = f1.findAt(((7.333333, 15.333333, 0.4), ), ((14.666667, 15.1, 
@@ -292,27 +270,27 @@ rp23=a.ReferencePoint(point=a.instances['Plate-1'].InterestingPoint(edge=e11.fin
 
 
 #left
-#edges1 = e1.findAt(((0.0, 1.0, 0.0), ))
-#a.Set(edges=edges1, name='End-1')
-#e1 = a.instances['Plate-1'].edges
-#edges1 = e1.findAt(((0.0, 10.375, 0.0), ), ((0.0, 7.375, 0.0), ), ((0.0, 3.875, 
-#    0.0), ), ((0.0, 0.75, 0.0), ), ((0.0, 11.875, 0.0), ))
-#a.Set(edges=edges1, name='End-1')
+edges1 = e1.findAt(((0.0, 1.0, 0.0), ))
+a.Set(edges=edges1, name='End-1')
+e1 = a.instances['Plate-1'].edges
+edges1 = e1.findAt(((0.0, 10.375, 0.0), ), ((0.0, 7.375, 0.0), ), ((0.0, 3.875, 
+    0.0), ), ((0.0, 0.75, 0.0), ), ((0.0, 11.875, 0.0), ))
+a.Set(edges=edges1, name='End-1')
 
-##middle
-##edges1 = e1.findAt(((span, 1.0, 0.0), ))
-##a.Set(edges=edges1, name='End-2')
-
-#edges1 = e1.findAt(((11.0, 9.125, 0.0), ), ((11.0, 12.175, 0.0), ), ((11.0, 
-#    5.625, 0.0), ), ((11.0, 2.25, 0.0), ), ((11.0, 14.85, 0.0), ))
+#middle
+#edges1 = e1.findAt(((span, 1.0, 0.0), ))
 #a.Set(edges=edges1, name='End-2')
 
-##right
-##edges1 = e1.findAt(((2*span, 1.0, 0.0), ))
-##a.Set(edges=edges1, name='End-3')
-#edges1 = e1.findAt(((22.0, 9.125, 0.0), ), ((22.0, 5.625, 0.0), ), ((22.0, 
-#    2.25, 0.0), ), ((22.0, 17.075, 0.0), ), ((22.0, 13.225, 0.0), ))
+edges1 = e1.findAt(((11.0, 9.125, 0.0), ), ((11.0, 12.175, 0.0), ), ((11.0, 
+    5.625, 0.0), ), ((11.0, 2.25, 0.0), ), ((11.0, 14.85, 0.0), ))
+a.Set(edges=edges1, name='End-2')
+
+#right
+#edges1 = e1.findAt(((2*span, 1.0, 0.0), ))
 #a.Set(edges=edges1, name='End-3')
+edges1 = e1.findAt(((22.0, 9.125, 0.0), ), ((22.0, 5.625, 0.0), ), ((22.0, 
+    2.25, 0.0), ), ((22.0, 17.075, 0.0), ), ((22.0, 13.225, 0.0), ))
+a.Set(edges=edges1, name='End-3')
 
 #Create Step
 mdb.models[modelName].StaticStep(name='ApplyLoad', previous='Initial')

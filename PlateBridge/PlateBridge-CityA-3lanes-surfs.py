@@ -224,55 +224,64 @@ a.PartitionFaceByShortestPath(faces=pickedFaces,
     16.5, 18.75, 0.4)), rule=MIDDLE))
 
 #create vehicle lane
-dP11=a.DatumPointByCoordinate(coords=(0, 3, 0))
-dP12=a.DatumPointByCoordinate(coords=(0, 3+3.5, 0))
-dP13=a.DatumPointByCoordinate(coords=(0, 3+3.5+3.5, 0))
+laneWidth=3.5
 
-dP21=a.DatumPointByCoordinate(coords=(22, 3, 0))
-dP22=a.DatumPointByCoordinate(coords=(22, 3+3.5, 0))
-dP23=a.DatumPointByCoordinate(coords=(22, 3+3.5+3.5, 0))
+dP11=a.DatumPointByCoordinate(coords=(0, 3-laneWidth/2, 0))
+dP12=a.DatumPointByCoordinate(coords=(0, 3+3.5-laneWidth/2, 0))
+dP13=a.DatumPointByCoordinate(coords=(0, 3+3.5+3.5-laneWidth/2, 0))
+dP14=a.DatumPointByCoordinate(coords=(0, 3+3.5+3.5+laneWidth/2, 0))
+
+dP21=a.DatumPointByCoordinate(coords=(22, 3-laneWidth/2, 0))
+dP22=a.DatumPointByCoordinate(coords=(22, 3+3.5-laneWidth/2, 0))
+dP23=a.DatumPointByCoordinate(coords=(22, 3+3.5+3.5-laneWidth/2, 0))
+dP24=a.DatumPointByCoordinate(coords=(22, 3+3.5+3.5+laneWidth/2, 0))
 
 f1 = a.instances['Plate-1'].faces
-pickedFaces = f1.findAt(((7.333333, 8.133333, 0.0), ), ((14.666667, 4.3, 0.0), 
+pickedFaces = f1.findAt(((7.333333, 3-laneWidth/2-0.1, 0.0), ), ((14.666667, 3-laneWidth/2-0.1, 0.0), 
     ))
 d1 = a.datums
 a.PartitionFaceByShortestPath(point1=d1[dP11.id], point2=d1[dP21.id], faces=pickedFaces)
 
 f1 = a.instances['Plate-1'].faces
-pickedFaces = f1.findAt(((3.666667, 5.833333, 0.0), ), ((14.666667, 6.3, 0.0), 
+pickedFaces = f1.findAt(((3.666667, 3+3.5-laneWidth/2-0.1, 0.0), ), ((14.666667, 3+3.5-laneWidth/2-0.1, 0.0), 
     ))
 d11 = a.datums
 a.PartitionFaceByShortestPath(point1=d11[dP12.id], point2=d11[dP22.id], 
     faces=pickedFaces)
+
 f1 = a.instances['Plate-1'].faces
-pickedFaces = f1.findAt(((3.666667, 8.166667, 0.0), ), ((14.666667, 8.633333, 
+pickedFaces = f1.findAt(((3.666667, 3+3.5+3.5-laneWidth/2-0.1, 0.0), ), ((14.666667, 3+3.5+3.5-laneWidth/2-0.1, 
     0.0), ))
 d1 = a.datums
 a.PartitionFaceByShortestPath(point1=d1[dP13.id], point2=d1[dP23.id], faces=pickedFaces)
+
+f1 = a.instances['Plate-1'].faces
+pickedFaces = f1.findAt(((3.666667, 3+3.5+3.5+laneWidth/2-0.1, 0.0), ), ((14.666667, 3+3.5+3.5+laneWidth/2-0.1, 
+    0.0), ))
+d1 = a.datums
+a.PartitionFaceByShortestPath(point1=d1[dP14.id], point2=d1[dP24.id], faces=pickedFaces)
 
 #create rp point
 #concentrated load
 e11 = a.instances['Plate-1'].edges
 #rp1~3
-rp11=a.ReferencePoint(point=a.instances['Plate-1'].InterestingPoint(edge=e11.findAt(
-    coordinates=(8.25, 3.0, 0.0)), rule=MIDDLE))
+rp11=a.ReferencePoint(point=(5.5, 3.0, 0.0))
 e1 = a.instances['Plate-1'].edges
-rp12=a.ReferencePoint(point=a.instances['Plate-1'].InterestingPoint(edge=e1.findAt(
-    coordinates=(8.25, 6.5, 0.0)), rule=MIDDLE))
+rp12=a.ReferencePoint(point=(5.5, 6.5, 0.0))
 e11 = a.instances['Plate-1'].edges
-rp13=a.ReferencePoint(point=a.instances['Plate-1'].InterestingPoint(edge=e11.findAt(
-    coordinates=(8.25, 10.0, 0.0)), rule=MIDDLE))
-#line load
-#rp4~6
-e11 = a.instances['Plate-1'].edges
-rp21=a.ReferencePoint(point=a.instances['Plate-1'].InterestingPoint(edge=e11.findAt(
-    coordinates=(8.25, 3.0, 0.0)), rule=MIDDLE))
-e1 = a.instances['Plate-1'].edges
-rp22=a.ReferencePoint(point=a.instances['Plate-1'].InterestingPoint(edge=e1.findAt(
-    coordinates=(8.25, 6.5, 0.0)), rule=MIDDLE))
-e11 = a.instances['Plate-1'].edges
-rp23=a.ReferencePoint(point=a.instances['Plate-1'].InterestingPoint(edge=e11.findAt(
-    coordinates=(8.25, 10.0, 0.0)), rule=MIDDLE))
+rp13=a.ReferencePoint(point=(5.5, 10.0, 0.0))
+
+##line load
+##rp4~6
+#e11 = a.instances['Plate-1'].edges
+#rp21=a.ReferencePoint(point=a.instances['Plate-1'].InterestingPoint(edge=e11.findAt(
+#    coordinates=(8.25, 3.0, 0.0)), rule=MIDDLE))
+#e1 = a.instances['Plate-1'].edges
+#rp22=a.ReferencePoint(point=a.instances['Plate-1'].InterestingPoint(edge=e1.findAt(
+#    coordinates=(8.25, 6.5, 0.0)), rule=MIDDLE))
+#e11 = a.instances['Plate-1'].edges
+#rp23=a.ReferencePoint(point=a.instances['Plate-1'].InterestingPoint(edge=e11.findAt(
+#    coordinates=(8.25, 10.0, 0.0)), rule=MIDDLE))
 
 #a = mdb.models['FuzhouHouyuRoad'].rootAssembly
 #s1 = a.instances['Plate-1'].faces
@@ -371,27 +380,49 @@ for i in range(0,len(rPoint)):
         createStepName='ApplyLoad', region=region, cf3=tupleLoad[i], 
         distributionType=UNIFORM, field='', localCsys=None)
 
-#create line cload
-q=10.5
-rPoint=(rp21,rp22,rp23)
-tupleLoad=(-q*span*1000,-q*span*1000,-q*span*1000)
-edgeTuple=((8.25, 3.0, 0.0),(8.25, 6.5, 0.0),(8.25, 10.0, 0.0))
+a = mdb.models[modelName].rootAssembly
+s1 = a.instances['Plate-1'].faces
+side2Faces1 = s1.findAt(((7.333333, 3.583333, 0.0), ))
+region = a.Surface(side2Faces=side2Faces1, name='Surf-7')
+mdb.models[modelName].Pressure(name='Load-4', 
+    createStepName='ApplyLoad', region=region, distributionType=UNIFORM, 
+    field='', magnitude=-3000.0, amplitude=UNSET)
 
-for i in range(0,len(rPoint)):
-    r1 = a.referencePoints
-    refPoints1=(r1[rPoint[i].id], )
-    region1=a.Set(referencePoints=refPoints1, name='m_Set-'+str(i+largeNum+3))
-    e1 = a.instances['Plate-1'].edges
-    edges1 = e1.findAt((edgeTuple[i], ))
-    region2=a.Set(edges=edges1, name='s_Set-'+str(i+largeNum+3))
-    mdb.models[modelName].Coupling(name='Constraint-RP'+str(i+largeNum+3), 
-        controlPoint=region1, surface=region2, influenceRadius=WHOLE_SURFACE, 
-        couplingType=DISTRIBUTING, weightingMethod=UNIFORM, localCsys=None, u1=ON, 
-        u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON)
-    region = regionToolset.Region(referencePoints=refPoints1)
-    mdb.models[modelName].ConcentratedForce(name='Load-'+str(i+1+3), 
-        createStepName='ApplyLoad', region=region, cf3=tupleLoad[i], 
-        distributionType=UNIFORM, field='', localCsys=None)
+s1 = a.instances['Plate-1'].faces
+side2Faces1 = s1.findAt(((7.333333, 7.083333, 0.0), ))
+region = a.Surface(side2Faces=side2Faces1, name='Surf-8')
+mdb.models[modelName].Pressure(name='Load-5', 
+    createStepName='ApplyLoad', region=region, distributionType=UNIFORM, 
+    field='', magnitude=-3000.0, amplitude=UNSET)
+
+s1 = a.instances['Plate-1'].faces
+side2Faces1 = s1.findAt(((7.988095, 10.583333, 0.0), ))
+region = a.Surface(side2Faces=side2Faces1, name='Surf-9')
+mdb.models[modelName].Pressure(name='Load-6', 
+    createStepName='ApplyLoad', region=region, distributionType=UNIFORM, 
+    field='', magnitude=-3000.0, amplitude=UNSET)
+
+##create line cload
+#q=10.5
+#rPoint=(rp21,rp22,rp23)
+#tupleLoad=(-q*span*1000,-q*span*1000,-q*span*1000)
+#edgeTuple=((8.25, 3.0, 0.0),(8.25, 6.5, 0.0),(8.25, 10.0, 0.0))
+
+#for i in range(0,len(rPoint)):
+#    r1 = a.referencePoints
+#    refPoints1=(r1[rPoint[i].id], )
+#    region1=a.Set(referencePoints=refPoints1, name='m_Set-'+str(i+largeNum+3))
+#    e1 = a.instances['Plate-1'].edges
+#    edges1 = e1.findAt((edgeTuple[i], ))
+#    region2=a.Set(edges=edges1, name='s_Set-'+str(i+largeNum+3))
+#    mdb.models[modelName].Coupling(name='Constraint-RP'+str(i+largeNum+3), 
+#        controlPoint=region1, surface=region2, influenceRadius=WHOLE_SURFACE, 
+#        couplingType=DISTRIBUTING, weightingMethod=UNIFORM, localCsys=None, u1=ON, 
+#        u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON)
+#    region = regionToolset.Region(referencePoints=refPoints1)
+#    mdb.models[modelName].ConcentratedForce(name='Load-'+str(i+1+3), 
+#        createStepName='ApplyLoad', region=region, cf3=tupleLoad[i], 
+#        distributionType=UNIFORM, field='', localCsys=None)
 
 #1	5.5,1.5,0
 #2	5.5,3.4,0
