@@ -22,6 +22,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="PlateBridge - Copy - Copy.py" />
+    <Compile Include="PlateBridge-CityA-3lanes-2ndSpanMid.py" />
+    <Compile Include="PlateBridge-CityA-rq-2ndSpanMid.py" />
     <Compile Include="PlateBridge-CityA-rq-Support.py" />
     <Compile Include="PlateBridge-CityA-Support.py" />
     <Compile Include="PlateBridge-CityA-3lanes-surfs.py" />
